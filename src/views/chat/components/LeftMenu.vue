@@ -1,8 +1,8 @@
 <template>
-    <div class="h-screen dark hidden flex-shrink-0 bg-gray-900 md:flex md:w-[260px] md:flex-col">
+    <div class="h-screen dark flex-shrink-0 bg-gray-900 md:flex w-[320px] md:w-[260px] md:flex-col">
       <div class="relative flex h-full w-full max-w-xs flex-1 flex-col bg-gray-900" data-headlessui-state="open">
-        <div class="absolute top-0 right-0 -mr-12 pt-2">
-          <button type="button"	class="ml-1 flex h-10 w-10 items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white text-white"
+        <div class="absolute top-0 right-0 -mr-12 pt-2" v-if="showMenu">
+          <button type="button"	class="ml-1 flex h-10 w-10 items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white text-white rounded-md"
             tabindex="0" @click="closeMenu">
             <span class="sr-only">Close sidebar</span>
             <icon-svg name="close" class="w-6 h-6"></icon-svg>
@@ -32,13 +32,14 @@
     </div>
 </template>
 <script setup>
-import { ref } from "vue"
+import { ref  } from "vue"
 
 defineProps({
-  isMobile:Boolean
+  showMenu:Boolean
 })
-const showMenu = ref(false)
+const emit = defineEmits(['close'])
 function closeMenu(){
+  emit('close')
   console.log('close',this)
 
 }

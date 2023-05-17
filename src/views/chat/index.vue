@@ -1,22 +1,32 @@
 <script setup>
-import { ref } from "vue";
+import { provide, reactive, ref } from "vue";
 import LeftMenu from "./components/LeftMenu.vue";
+import pageFooter from "./components/Footer.vue";
+import swiperPage from "../../components/swiper.vue"
+
+
+
+const rooms = reactive([])
 
 const count = ref(0);
 let showMenu = ref(false);
+provide(rooms)
 </script>
 
 <template>
 	<div class="overflow-hidden w-full h-full relative flex">
 		<left-menu class="hidden md:block"></left-menu>
-		<div class="z-40 relative" v-if="showMenu">
-			<div class="fixed block inset-0 bg-gray-600 bg-opacity-75"></div>
-			<left-menu class="fixed z-40"></left-menu>
+		<div class="z-40 relative block md:hidden " >
+			<Transition>
+				<div class="fixed block bg-opacity-75 inset-0 bg-gray-600 md:hidden" @click="showMenu=false" v-if="showMenu"></div>
+			</Transition>
+			
+			<left-menu class="fixed z-40 mobile-menu" :class="{'menu-hidden':!showMenu}" :showMenu="showMenu" @close="showMenu=false"></left-menu>
 		</div>
-		<div class="flex h-full max-w-full flex-1 flex-col">
+		<div class="flex h-screen max-w-full flex-1 flex-col">
 			<div
 				class="sticky top-0 z-10 flex items-center border-b border-white/20 bg-gray-800 pl-1 pt-1 text-gray-200 sm:pl-3 md:hidden">
-				<button type="button"
+				<button type="button" @click="showMenu = true"
 					class="-ml-0.5 -mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white dark:hover:text-white">
 					<span class="sr-only">Open sidebar</span>
 					<icon-svg name="menu" class="w-6 h-6"></icon-svg>
@@ -26,6 +36,7 @@ let showMenu = ref(false);
 					<icon-svg name="plus" class="w-6 h-6"></icon-svg>
 				</button>
 			</div>
+			<!-- <swiper-page></swiper-page> -->
 			<main class="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
 				<div class="flex-1 overflow-hidden">
 					<div class="react-scroll-to-bottom--css-mbafh-79elbk h-full dark:bg-gray-800">
@@ -39,8 +50,9 @@ let showMenu = ref(false);
 									</h1>
 									<div class="md:flex items-start text-center gap-3.5">
 										<div class="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
-											
-											<h2 class="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
+
+											<h2
+												class="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
 												<icon-svg name="examples" class="w-6 h-6"></icon-svg>
 												Examples
 											</h2>
@@ -57,7 +69,8 @@ let showMenu = ref(false);
 											</ul>
 										</div>
 										<div class="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
-											<h2 class="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
+											<h2
+												class="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
 												<icon-svg name="capabilities" class="w-6 h-6"></icon-svg>
 												Capabilities
 											</h2>
@@ -74,7 +87,8 @@ let showMenu = ref(false);
 											</ul>
 										</div>
 										<div class="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
-											<h2 class="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
+											<h2
+												class="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
 												<icon-svg name="limitations" class="w-6 h-6"></icon-svg>
 												Limitations
 											</h2>
@@ -98,43 +112,49 @@ let showMenu = ref(false);
 						</div>
 					</div>
 				</div>
-				<div
-					class="absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient pt-2">
-					<form
-						class="stretch mx-2 flex flex-row gap-3 last:mb-2 md:mx-4 md:last:mb-6 lg:mx-auto lg:max-w-2xl xl:max-w-3xl">
-						<div class="relative flex h-full flex-1 items-stretch md:flex-col">
-							<div class="">
-								<div class="h-full flex ml-1 md:w-full md:m-auto md:mb-2 gap-0 md:gap-2 justify-center"></div>
-							</div>
-							<div
-								class="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
-								<textarea tabindex="0" data-id="root" rows="1" placeholder="Send a message..."
-									class="m-0 w-full resize-none border-0 bg-transparent p-0 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent pl-2 md:pl-0"
-									style="max-height: 200px; height: 24px; overflow-y: hidden"></textarea><button disabled=""
-									class="absolute p-1 rounded-md text-gray-500 bottom-1.5 md:bottom-2.5 hover:bg-gray-100 enabled:dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent right-1 md:right-2 disabled:opacity-40">
-									<icon-svg name="send" class="w-4 h-4"></icon-svg>
-									
-								</button>
-							</div>
-						</div>
-					</form>
-					<div class="px-3 pt-2 pb-3 text-center text-xs text-black/50 dark:text-white/50 md:px-4 md:pt-3 md:pb-6">
-						<span><a href="https://help.openai.com/en/articles/6825453-chatgpt-release-notes" target="_blank"
-								rel="noreferrer" class="underline">ChatGPT Mar 23 Version</a>. Free Research Preview. ChatGPT may produce
-							inaccurate
-							information about people, places, or facts.</span>
-					</div>
-					<iframe id="xcanwin" src="/api/auth/session" style="height: 0px; width: 100%"></iframe>
-				</div>
+				<page-footer></page-footer>
 			</main>
 		</div>
 	</div>
 </template>
 
-<style scoped>
-/* // @media (max-width: 768px) {
-//   .flex {
-//     flex-direction: column;
-//   }
-// } */
+<style lang="scss" scoped>
+.mobile-menu{
+		transition: all 0.3s;
+	&.menu-hidden{
+			transform: translateX(-100%);
+	}
+}
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 </style>
